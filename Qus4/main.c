@@ -13,7 +13,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
-
+#include<string.h>
 void Update1()
 {
 	char arrInput[15] = { 0, };
@@ -130,6 +130,7 @@ void Update()
 {
 	const int MAX = 20;
 
+	char *pInput = NULL;
 	char arrInput[20] = { 0, };
 	char arrEngDB[20][20] = {0,};
 	char arrKorDB[20][20] = {0,};
@@ -173,6 +174,7 @@ void Update()
 		{
 			if (arrInput[j] != '\0')
 			{
+				
 				arrEngDB[nEngCounter][j] = arrInput[j];
 			}			
 		}
@@ -210,50 +212,52 @@ void Update()
 	i = 0;
 	j = 0;
 
+	
 
 	printf("문제\n");
 	printf("한글 단어를 물어보면 (ex. 사과?) 영어 단어 입력(ex.Apple)\n");
 	while (1)
 	{
 		srand(time(NULL));
-		int nTemp = rand() % (nEngCounter + 1);
+		int nTemp = rand() % (nEngCounter );
 		printf("%s를 영어로 하면??", arrKorDB[nTemp]);
 		scanf_s("%s",arrInput, sizeof(arrInput));
+		
 		
 		while (1)
 		{
 			i++;
 			nInputLength = i;
+			pInput = arrInput;
 			if (arrInput[i] == '\0')
 			{
+				int k = 0;
+				for (k = i; k < MAX; k++)
+				{
+					arrInput[k] = '\0';
+				}
 				i = 0;
 				break;
 			}
 		}
 
+
 		for (i = 0; i < MAX; i++)
 		{
-			for (j = 0; j < nInputLength; j++)
+			if (_stricmp( arrEngDB[i], arrInput) == 0)
 			{
-				if (arrInput[j] != '\0')
-				{
-					if (arrEngDB[i][j] == arrInput[j])
-					{
-						nScore += 10;
-					}
-				}
-			}			
+				printf("%s는(은) 영어로 %s! 정답!\n",arrKorDB[i] ,arrEngDB[i] );
+				break;
+			}
 		}
-		
-
 	}
 
-	for (i = 0; i< MAX; i++)
+	/*for (i = 0; i< MAX; i++)
 	{
 		printf("영단어 : %s \n", arrEngDB[i]);
 		printf("한단어 : %s \n", arrKorDB[i]);
 
-	}
+	}*/
 	printf("입력 종료 \n");
 
 }
