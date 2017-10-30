@@ -242,14 +242,14 @@ void Update()
 		}
 
 
-		for (i = 0; i < MAX; i++)
-		{
-			if (_stricmp( arrEngDB[i], arrInput) == 0)
+		//for (i = 0; i < MAX; i++)
+		//{
+			if (_stricmp( arrEngDB[nTemp], arrInput) == 0)
 			{
 				printf("%s는(은) 영어로 %s! 정답!\n",arrKorDB[i] ,arrEngDB[i] );
 				break;
 			}
-		}
+		//}
 	}
 
 	/*for (i = 0; i< MAX; i++)
