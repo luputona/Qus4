@@ -143,18 +143,21 @@ void Update()
 	int nInputLength = 0;
 	int nRandomQ = 0;
 
+	int nDBCount = 0;
+	int nAwCount = 0;
+	int nQuesCount = 0;
 	int nScore = 0;
 
 	printf("영어 단어와 뜻인 한글 단어를 입력 (ex. Apple 사과) \n");
-	printf("0을 입력하면 입력 종료. \n");
+	printf("0을 입력하면 입력 종료. 게임 시작 \n");
 		
 	//pEngDB[0] = "apple";
 
 	while (1)
 	{
-		printf("영어 단어 입력 (0을 입력하면 종료):");
+		printf("영어 단어 입력 (0을 입력하면 입력 종료. 게임 시작) : ");
 		scanf_s("%s", arrInput, sizeof(arrInput));
-
+		
 		if (arrInput[0] == '0')
 		{
 			break;
@@ -181,7 +184,7 @@ void Update()
 		nEngCounter++;
 		nEngDbCounter++;
 
-		printf("한글 단어 입력 (0을 입력하면 종료):");
+		printf("한글 단어 입력 (0을 입력하면 입력 종료. 게임 시작) :");
 		scanf_s("%s", arrInput, sizeof(arrInput));
 		
 		if (arrInput[0] == '0')
@@ -209,20 +212,23 @@ void Update()
 		nKorCounter++;
 		nKorDbCounter++;
 	}
+	for ( i = 0; i<MAX; i++)
+	{
+		printf("\n\n");
+	}
+	
 	i = 0;
 	j = 0;
 
-	
-
-	printf("문제\n");
-	printf("한글 단어를 물어보면 (ex. 사과?) 영어 단어 입력(ex.Apple)\n");
+	printf("문제 갑니다.\n");
+	printf("한글 단어를 물어보면 (ex. 사과?) 영어 단어 입력(ex.apple)\n");
 	while (1)
 	{
 		srand(time(NULL));
 		int nTemp = rand() % (nEngCounter );
-		printf("%s를 영어로 하면??", arrKorDB[nTemp]);
+		printf("%s를 영어로 하면??\n=>", arrKorDB[nTemp]);
+		++nQuesCount;
 		scanf_s("%s",arrInput, sizeof(arrInput));
-		
 		
 		while (1)
 		{
@@ -239,17 +245,27 @@ void Update()
 				i = 0;
 				break;
 			}
+		}		
+
+		if (_stricmp( arrEngDB[nTemp], arrInput) == 0)
+		{
+			printf("%s는(은) 영어로 %s! 정답!\n",arrKorDB[nTemp] ,arrEngDB[nTemp] );
+			nAwCount++;
 		}
-
-
-		//for (i = 0; i < MAX; i++)
-		//{
-			if (_stricmp( arrEngDB[nTemp], arrInput) == 0)
+		else
+		{
+			printf("틀렸습니다. 정답은 %s입니다. \n",arrEngDB[nTemp]);
+		}
+		
+		if (nQuesCount > nEngDbCounter)
+		{
+			for ( i = 0; i < nQuesCount; i++)
 			{
-				printf("%s는(은) 영어로 %s! 정답!\n",arrKorDB[i] ,arrEngDB[i] );
-				break;
+				nScore += (100 / nQuesCount);
 			}
-		//}
+			printf("%d문제중 %d문제를 맞추셨습니다. \n 총스코어 %d점 입니다.\n",nQuesCount,nAwCount,nScore);
+			break;
+		}
 	}
 
 	/*for (i = 0; i< MAX; i++)
@@ -258,7 +274,7 @@ void Update()
 		printf("한단어 : %s \n", arrKorDB[i]);
 
 	}*/
-	printf("입력 종료 \n");
+	printf("게임 종료 \n");
 
 }
 
