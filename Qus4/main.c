@@ -31,6 +31,7 @@ void Update()
 	int nKorDbCounter = 0; //DB에 들어가 있는 단어의 갯수. 문제 카운터용
 	int nInputLength = 0; //입력한 단어의 길이
 	
+	int nStartQuesNumber = 0;
 	int nAwCount = 0; //정답의 갯수 카운트
 	int nQuesCount = 0; //문제의 갯수 카운트
 	int nScore = 0; // 총 점수 
@@ -109,13 +110,17 @@ void Update()
 	i = 0;
 	j = 0;
 
-	printf("문제 갑니다.\n");
+	printf("몇 문제를 푸시겠습니까?? \n");
+	printf("현재 가능한 문제 최대 갯수 %d문제\n", nEngDbCounter);
+	scanf_s("%d",&nStartQuesNumber,sizeof(int));
+	printf("%d 문제 갑니다.\n", nStartQuesNumber);
 	printf("한글 단어를 물어보면 (ex. 사과?) 영어 단어 입력(ex.apple)\n");
-	while (1)
+	
+	while (nStartQuesNumber != 0)
 	{
 		srand(time(NULL));
 		int nTemp = rand() % (nEngCounter );
-		printf("%s를 영어로 하면??\n=>", arrKorDB[nTemp]);
+		printf("\n%s를 영어로 하면??\n=>", arrKorDB[nTemp]);
 		++nQuesCount;
 		scanf_s("%s",arrInput, sizeof(arrInput));
 		
@@ -138,25 +143,26 @@ void Update()
 
 		if (_stricmp( arrEngDB[nTemp], arrInput) == 0)
 		{
-			printf("%s는(은) 영어로 %s! 정답!\n",arrKorDB[nTemp] ,arrEngDB[nTemp] );
+			printf("\n%s는(은) 영어로 %s! 정답!\n",arrKorDB[nTemp] ,arrEngDB[nTemp] );
 			nAwCount++;
 		}
 		else
 		{
-			printf("틀렸습니다. 정답은 %s입니다. \n",arrEngDB[nTemp]);
+			printf("\n틀렸습니다. 정답은 %s입니다. \n",arrEngDB[nTemp]);
 		}
-		
-		if (nQuesCount > nEngDbCounter)
-		{
-			for ( i = 0; i < nQuesCount; i++)
-			{
-				nScore += (100 / nQuesCount);
-			}
-			printf("%d문제중 %d문제를 맞추셨습니다. \n 총스코어 %d점 입니다.\n",nQuesCount,nAwCount,nScore);
-			break;
-		}
-	}
 
+		
+		nStartQuesNumber--;
+	}
+	if (nStartQuesNumber == 0)
+	{
+		for (i = 0; i < nQuesCount; i++)
+		{
+			nScore += (100 / nQuesCount);
+		}
+		printf("\n\n%d문제중 %d문제를 맞추셨습니다. \n\n 총스코어 %d점 입니다.\n", nQuesCount, nAwCount, nScore);
+
+	}
 	/*for (i = 0; i< MAX; i++)
 	{
 		printf("영단어 : %s \n", arrEngDB[i]);
@@ -164,7 +170,7 @@ void Update()
 
 	}*/
 	printf("\n\n\n\n\n\n\n\n\n");
-	printf("게임 종료 \n");
+	printf("게임 종료 \n\n\n");
 
 }
 
