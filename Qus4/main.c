@@ -14,6 +14,7 @@
 #include<stdlib.h>
 #include<time.h>
 #include<string.h>
+#include<math.h>
 
 void Update()
 {
@@ -33,8 +34,8 @@ void Update()
 	
 	int nStartQuesNumber = 0;
 	int nAwCount = 0; //정답의 갯수 카운트
-	int nQuesCount = 0; //문제의 갯수 카운트
-	int nScore = 0; // 총 점수 
+	int nQuesCount = 0; //문제의 갯수 카운트	
+	float fScore = 0.0f; // 총 점수 
 
 	printf("영어 단어와 뜻인 한글 단어를 입력 (ex. Apple 사과/대소문자 상관 없음) \n");
 	printf("단어당 20문자 총 20단어까지 입력 가능.\n");
@@ -43,6 +44,7 @@ void Update()
 	
 	while (1)
 	{
+	Engback:
 		printf("영어 단어 입력 (0을 입력하면 입력 종료. 게임 시작) : ");
 		scanf_s("%s", arrInput, sizeof(arrInput));
 		
@@ -51,7 +53,7 @@ void Update()
 		{
 			break;
 		}
-		
+
 		//입력한 단어의 마지막 \0문자가 오기전까지 배열을 nInputLength에 카운트
 		while (1)
 		{
@@ -59,6 +61,20 @@ void Update()
 			nInputLength = i;
 			if (arrInput[i] == '\0') 
 			{
+				int k;
+				for (k = i; k < MAX; k++)
+				{
+					arrInput[k] = '\0';
+				}
+				for (j = 0; j < MAX; j++)
+				{
+					if (_stricmp(arrEngDB[j], arrInput) == 0)
+					{
+						printf("중복된 단어가 있습니다. 다시 입력해 주세요.\n");
+						goto Engback;
+					}
+				}
+				
 				i = 0;
 				break;
 			}
@@ -73,6 +89,7 @@ void Update()
 		nEngCounter++;
 		nEngDbCounter++;
 
+	Korback:
 		printf("한글 단어 입력 (0을 입력하면 입력 종료. 게임 시작) :");
 		scanf_s("%s", arrInput, sizeof(arrInput));
 		
@@ -88,6 +105,19 @@ void Update()
 			nInputLength = i;
 			if (arrInput[i] == '\0')
 			{
+				int k;
+				for (k = i; k < MAX; k++)
+				{
+					arrInput[k] = '\0';
+				}
+				for (j = 0; j < MAX; j++)
+				{
+					if (_stricmp(arrKorDB[j], arrInput) == 0)
+					{
+						printf("중복된 단어가 있습니다. 다시 입력해 주세요.\n\n");
+						goto Korback;
+					}
+				}
 				i = 0;
 				break;
 			}
@@ -150,17 +180,15 @@ void Update()
 		{
 			printf("\n틀렸습니다. 정답은 %s입니다. \n",arrEngDB[nTemp]);
 		}
-
-		
 		nStartQuesNumber--;
 	}
 	if (nStartQuesNumber == 0)
 	{
 		for (i = 0; i < nQuesCount; i++)
-		{
-			nScore += (100 / nQuesCount);
+		{			
+			fScore = fScore + (100.00f / nQuesCount);
 		}
-		printf("\n\n%d문제중 %d문제를 맞추셨습니다. \n\n 총스코어 %d점 입니다.\n", nQuesCount, nAwCount, nScore);
+		printf("\n\n%d문제중 %d문제를 맞추셨습니다. \n\n 총스코어 %.0f점 입니다.\n", nQuesCount, nAwCount, ceilf(fScore));
 
 	}
 	/*for (i = 0; i< MAX; i++)
