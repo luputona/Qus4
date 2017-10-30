@@ -24,6 +24,7 @@ void Update()
 	char arrInput[20] = { 0, };
 	char arrEngDB[20][20] = {0,};
 	char arrKorDB[20][20] = {0,};
+	int awsCheck[20] = { 0, };
 
 	int i = 0, j = 0;
 	int nEngCounter = 0; //DB안에 들어가 있는 단어의 갯수. 배열 인덱스용
@@ -32,9 +33,11 @@ void Update()
 	int nKorDbCounter = 0; //DB에 들어가 있는 단어의 갯수. 문제 카운터용
 	int nInputLength = 0; //입력한 단어의 길이
 	
+	int nAwsCheck = 0;//중복문제 체크
 	int nStartQuesNumber = 0;
 	int nAwCount = 0; //정답의 갯수 카운트
 	int nQuesCount = 0; //문제의 갯수 카운트	
+	int nItem = 0; //랜덤한 DB의 인덱스
 	float fScore = 0.0f; // 총 점수 
 
 	printf("영어 단어와 뜻인 한글 단어를 입력 (ex. Apple 사과/대소문자 상관 없음) \n");
@@ -145,12 +148,22 @@ void Update()
 	scanf_s("%d",&nStartQuesNumber,sizeof(int));
 	printf("%d 문제 갑니다.\n", nStartQuesNumber);
 	printf("한글 단어를 물어보면 (ex. 사과?) 영어 단어 입력(ex.apple)\n");
-	
+
 	while (nStartQuesNumber != 0)
-	{
+	{	
 		srand(time(NULL));
-		int nTemp = rand() % (nEngCounter );
-		printf("\n%s를 영어로 하면??\n=>", arrKorDB[nTemp]);
+		nItem = rand() % (nEngCounter );
+
+		if (awsCheck[nItem] == nAwsCheck)
+		{
+			awsCheck[nItem] = 1;			
+		}
+		else if (awsCheck[nItem] != nAwsCheck)
+		{
+			continue;
+		}
+
+		printf("\n%s를 영어로 하면??\n=>", arrKorDB[nItem]);
 		++nQuesCount;
 		scanf_s("%s",arrInput, sizeof(arrInput));
 		
@@ -158,7 +171,6 @@ void Update()
 		{
 			i++;
 			nInputLength = i;
-			//pInput = arrInput;
 			if (arrInput[i] == '\0')
 			{
 				int k = 0;
@@ -171,14 +183,14 @@ void Update()
 			}
 		}		
 
-		if (_stricmp( arrEngDB[nTemp], arrInput) == 0)
+		if (_stricmp( arrEngDB[nItem], arrInput) == 0)
 		{
-			printf("\n%s는(은) 영어로 %s! 정답!\n",arrKorDB[nTemp] ,arrEngDB[nTemp] );
+			printf("\n%s는(은) 영어로 %s! 정답!\n",arrKorDB[nItem] ,arrEngDB[nItem] );
 			nAwCount++;
 		}
 		else
 		{
-			printf("\n틀렸습니다. 정답은 %s입니다. \n",arrEngDB[nTemp]);
+			printf("\n틀렸습니다. 정답은 %s입니다. \n",arrEngDB[nItem]);
 		}
 		nStartQuesNumber--;
 	}
